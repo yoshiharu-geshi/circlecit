@@ -49,7 +49,13 @@ jobs: # a collection of steps
       # - run: ./vendor/bin/phpunit tests
       - run: 
           name: Codecept Test
-          command: ./vendor/bin/codecept run 
+          command: ./vendor/bin/codecept run --html codeception.html --coverage-html coverage.html
           environment:
             - DB_USERNAME: SA
             - DB_PASSWORD: 1234abcD
+      - store_artifacts:
+          path: tests/_output/codeception.html
+          destination: codeception
+      - store_artifacts:
+          path: tests/_output/coverage.html
+          destination: coverage

@@ -3,7 +3,7 @@
 . .circleci/utils/bin/lib/settings.sh
 
 echo "Start"
-TARGET_LIST=`git diff --name-only origin/$TARGET_BRANCH | grep -e '.php$'`
+TARGET_LIST=`git diff --diff-filter AMCR --name-only origin/$TARGET_BRANCH | grep -e '.php$'`
 
 if [ -z "$TARGET_LIST" ]; then
     echo "PHP file not changed."

@@ -1,0 +1,19 @@
+{
+  "name": "codecheck",
+  "version": "1.0.0",
+  "description": "JS code check tools",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\"\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eslint-config-google": "^0.8.0",
+    "eslint": "^4.1.1"
+  }
+}

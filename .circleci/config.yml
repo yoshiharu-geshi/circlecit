@@ -1,0 +1,48 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.1-node-browsers
+      - image: microsoft/mssql-server-linux:2017-CU8
+        environment:
+          - ACCEPT_EULA: Y
+          - SA_PASSWORD: 1234abcD
+    working_directory: ~/repo
+    steps:
+      - checkout # special step to check out source code to working directory
+      - run: sudo apt install -y zlib1g-dev ruby freetds-dev unixodbc-dev
+      - run: sudo ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/
+      - run: sudo docker-php-ext-install zip pdo_dblib
+      # - run: sudo pecl install sqlsrv-5.3.0 && docker-php-ext-enable sqlsrv-5.3.0
+      - run: sudo pecl install pdo_sqlsrv-5.3.0
+      - run: echo -e "extension=pdo_sqlsrv.so" | sudo tee /usr/local/etc/php/php.ini > /dev/null
+      - run: sudo composer self-update
+      - run: sudo gem install bundler
+      # php cache
+      - restore_cache: # special step to restore the dependency cache if `composer.lock` does not change
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+      - run: composer install -n --prefer-dist
+      - save_cache: # special step to save the dependency cache with the `composer.lock` cache key template
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+      # ruby cache
+      - restore_cache:
+          keys:
+            - bundle-v2-{{ checksum "Gemfile.lock" }}
+            - bundle-v2-
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install
+      - save_cache:
+          key: bundle-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run: ./vendor/bin/phpunit tests
+      - run: .circleci/utils/bin/phpcs_inspect.sh
+      - store_artifacts:
+          path: build/logs/clover
+          destination: coverage

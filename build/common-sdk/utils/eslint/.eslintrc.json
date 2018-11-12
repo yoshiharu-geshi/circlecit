@@ -1,0 +1,27 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true
+    },
+    "extends": "google",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "plugins": [
+    ],
+    "rules": {
+        "require-jsdoc": "off",
+        "comma-dangle": "off",
+        "no-invalid-this": "off",
+        "no-var": "off",
+        "max-len": ["error", {"code": 160, "ignoreUrls": true}],
+        "spaced-comment": ["error", "always", {"exceptions": ["-", "+"]}],
+        "no-unused-vars": "off",
+        "no-http": ["error", {"blackList": ["aucfan.com", "afimg.jp"]}]
+    }
+}

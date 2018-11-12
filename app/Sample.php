@@ -16,7 +16,7 @@ class Sample
     /**
      * @return int timestamp
      */
-    public function getTimestamp()
+    public function get_Timestamp()
     {
         return strtotime("now");
     }

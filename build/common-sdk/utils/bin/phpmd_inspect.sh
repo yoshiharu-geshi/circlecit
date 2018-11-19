@@ -10,15 +10,7 @@ if [ -z "$TARGET_LIST" ]; then
     exit 0
 fi
 
-RESULT=`echo $TARGET_LIST \
-    | xargs vendor/bin/phpcs --standard=PSR2 --report=checkstyle \
-    | bundle exec checkstyle_filter-git diff origin/$TARGET_BRANCH`
-
-if [ -n "$COMMON_PULL_REQUEST" ]; then
-    `echo $RESULT | bundle exec saddler report \
-        --require saddler/reporter/github \
-        --reporter Saddler::Reporter::Github::PullRequestReviewComment`
-fi
+RESULT=`vendor/bin/phpmd "$(echo $TARGET_LIST | tr ' ' ',')" text unusedcode,cleancode,codesize`
 
 RESULT_TEXT=`echo $RESULT | bundle exec saddler report \
     --require saddler/reporter/text \

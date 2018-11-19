@@ -54,6 +54,7 @@ jobs: # a collection of steps
             - DB_USERNAME: SA
             - DB_PASSWORD: 1234abcD
       - run: .circleci/utils/bin/phpcs_inspect.sh
+      - run: .circleci/utils/bin/phpmd_inspect.sh
       - store_artifacts:
           path: tests/_output/codeception.html
           destination: codeception
